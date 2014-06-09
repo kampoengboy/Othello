@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace Tes_othello
 {
-    class Program
+    abstract class Button
     {
-        static void Main(string[] args)
-        {
-            Board othello = new Board();
-            Console.ReadKey();
-        }
+        public int coordinateX { set; get; }
+        public int coordinateY { set; get; }
     }
 }
