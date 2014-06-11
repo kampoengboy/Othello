@@ -1,0 +1,29 @@
+untuk masukan x dan o 
+hanya pada set cursor yang telah disediakan
+tes menggunakan index ganjil genap..
+even or odd
+jadi yang ganjil hanya bisa menekan o dengan metode ascii atau yang lain
+sedangkan x yang genap
+
+lalu untuk menangnya tes gunakan if apabila pada set cursor 
+||_____||_____||_____||
+||     ||     ||     ||
+||     ||     ||     ||
+||     ||     ||     ||
+||_____||_____||_____||
+||     ||     ||     ||
+||  X  ||  X  ||  X  ||
+||     ||     ||     ||
+||_____||_____||_____||
+
+if set cursor posisi ke sekian berisi x dan set cursor ke sekian berisi x dan set cursor sekian berisi x maka Console.Clear()
+Writeline Menang 1stperson
+
+else if set cursor sekian berisi o dan set cursor sekian berisi o da set cursor sekian berisi o maka Console.clear()
+writeline menang 2ndperson
+
+gunakan if untuk setiap kemungkinan2 set cursor posisi yang ada
+
+memang panjang soly mike 
+
+dicomment ya
