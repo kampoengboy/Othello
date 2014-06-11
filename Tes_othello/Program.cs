@@ -11,6 +11,15 @@ namespace Tes_othello
         static void Main(string[] args)
         {
             Board othello = new Board();
+            while(!othello.Allfilled())
+            {
+                Console.Clear();
+                othello.PrintBoard();
+                othello.Oturn();
+                Console.Clear();
+                othello.PrintBoard();
+                othello.Xturn();
+            }
             Console.ReadKey();
         }
     }

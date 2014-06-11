@@ -11,7 +11,7 @@ namespace Tes_othello
         public char button;
         public ButtonX(int x,int y)
         {
-            button = 'x';
+            button = 'X';
             coordinateX = x;
             coordinateY = y;
         }
