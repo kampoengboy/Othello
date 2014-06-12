@@ -21,6 +21,7 @@ namespace Tes_othello
                 Console.Clear();
                 othello.PrintBoard();
                 othello.Xturn();
+                othello.hasQuery = false;
             }
             othello.PrintBoard();
             Console.ReadKey();

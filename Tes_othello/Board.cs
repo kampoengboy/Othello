@@ -13,7 +13,6 @@ namespace Tes_othello
         }
         public bool hasQuery=false;
         public List<data> query = new List<data>();
-        public List<List<data>> listquery = new List<List<data>>();
         public Button[] col;
         public List<Button[]> row = new List<Button[]>(); //Polymorphism
         public int y = Console.WindowHeight / 2 -5;
@@ -87,7 +86,7 @@ namespace Tes_othello
                 {
                     if (row[query[key - 1].r][c] is ButtonX)
                         row[query[key - 1].r][c] = new ButtonO(query[key - 1].r, c);
-                    else if (row[query[key].r][c] is ButtonO)
+                    else if (row[query[key-1].r][c] is ButtonO)
                         break;
                 }
             }
@@ -99,7 +98,7 @@ namespace Tes_othello
                 {
                     if (row[query[key - 1].r][c] is ButtonX)
                         row[query[key - 1].r][c] = new ButtonO(query[key - 1].r, c);
-                    else if (row[query[key].r][c] is ButtonO)
+                    else if (row[query[key-1].r][c] is ButtonO)
                         break;
                 }
             }
@@ -943,14 +942,14 @@ namespace Tes_othello
                 for (int i = 0; i <= 8; i++)
                 {
                     Console.SetCursorPosition(x, y);
-                    Console.WriteLine("*****");
+                    Console.WriteLine("-----");
                     if (i != 8)
                     {
                         for (int j = 0; j < 3; j++)
                         {
                             y++;
                             Console.SetCursorPosition(x, y);
-                            Console.WriteLine("*   *");
+                            Console.WriteLine("|   |");
                         }
                     }
                     y++;
