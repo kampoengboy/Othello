@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
+
 namespace Tes_othello
 {
     class Board
@@ -11,8 +13,13 @@ namespace Tes_othello
         {
             public int r,c;
         }
-        public bool hasQuery=false;
+        int idx;
+        int tmpy;
+        public int scoreO, scoreX;
+        public bool hasQueryO=false;
+        public bool hasQueryX = false;
         public List<data> query = new List<data>();
+        public Queue<data> coordinate = new Queue<data>();
         public Button[] col;
         public List<Button[]> row = new List<Button[]>(); //Polymorphism
         public int y = Console.WindowHeight / 2 -5;
@@ -32,6 +39,31 @@ namespace Tes_othello
                 row.Add(col);
             }
         }
+        public void scoreboard()
+        {
+            scoreO = 0; scoreX = 0;
+            for(int i=0;i<8;i++)
+            {
+                for(int j=0;j<8;j++)
+                {
+                    if (row[i][j] is ButtonO)
+                        scoreO++;
+                    else if (row[i][j] is ButtonX)
+                        scoreX++;
+                }
+            }
+            Console.SetCursorPosition(0,Console.WindowHeight-8);
+            for(int i=0;i<Console.WindowWidth;i++)
+            {
+                Console.Write("-");
+            }
+            Console.SetCursorPosition(Console.WindowWidth/2-6, Console.WindowHeight - 7);
+            Console.Write("SCORE");
+            Console.SetCursorPosition(4, Console.WindowHeight - 5);
+            Console.Write("O = {0}",scoreO);
+            Console.SetCursorPosition(Console.WindowWidth-10, Console.WindowHeight - 5);
+            Console.Write("X = {0}", scoreX);
+        }
         public bool Allfilled()
         {
             for(int i=0;i<8;i++)
@@ -46,6 +78,7 @@ namespace Tes_othello
         }
         public void PrintBoard()
         {
+            int cc=0;
             Console.SetCursorPosition(Console.WindowWidth / 2 - 8, 1);
             Console.WriteLine("OTHELLO");
             Console.SetCursorPosition(22,27);
@@ -54,6 +87,7 @@ namespace Tes_othello
             Console.Write("COLUMN");
             Arena();
             int idxX, idxY;
+            int num = 1;
             int c=4;
             idxY = Console.WindowHeight / 2 - 13;
             idxX = Console.WindowWidth / 2 - 18;
@@ -62,19 +96,44 @@ namespace Tes_othello
             {
                foreach (Button j in row[i])
                {
-                    if (j is ButtonO)
-                        Console.Write(((ButtonO)j).button);
-                    else if (j is ButtonX)
-                        Console.Write(((ButtonX)j).button);
-                    else
-                        Console.Write(" ");
-                    Console.SetCursorPosition(idxX + c, idxY);
-                    c += 4;
+                   if (coordinate.Count > 0)
+                   {
+                       if (coordinate.Peek().r == i && coordinate.Peek().c == cc)
+                       {
+                           Console.SetCursorPosition(idxX+c-5,idxY);
+                           Console.Write("("+num+")");
+                           num++;
+                           coordinate.Dequeue();
+                       }
+                       else
+                       {
+                           if (j is ButtonO)
+                               Console.Write(((ButtonO)j).button);
+                           else if (j is ButtonX)
+                               Console.Write(((ButtonX)j).button);
+                           else
+                               Console.Write(" ");
+                       }
+                   }
+                   else
+                   {
+                       if (j is ButtonO)
+                           Console.Write(((ButtonO)j).button);
+                       else if (j is ButtonX)
+                           Console.Write(((ButtonX)j).button);
+                       else
+                           Console.Write(" ");
+                   }
+                   Console.SetCursorPosition(idxX + c, idxY);
+                   c += 4;
+                   cc++;
                 }
+                cc = 0;
                 idxY += 4;
                 Console.SetCursorPosition(idxX, idxY);
                 c = 4;
             }
+            scoreboard();
         }
         public void ReverseXtoO(int key)
         {
@@ -127,9 +186,65 @@ namespace Tes_othello
                 }
             }
             //dleftup
+            if (findDleftup(query[key - 1].r, query[key - 1].c, 3))
+            {
+                int j = query[key - 1].c;
+                row[query[key - 1].r][query[key - 1].c] = new ButtonO(query[key - 1].r, query[key - 1].c);
+                for (int r = query[key - 1].r - 1; r >= 0; r--)
+                {
+                    j--;
+                    if(j<0) break;
+                    if (row[r][j] is ButtonX)
+                        row[r][j] = new ButtonO(r, j);
+                    else if (row[r][j] is ButtonO)
+                        break;
+                }
+            }
             //dleftdown
+            if (findDleftdown(query[key - 1].r, query[key - 1].c, 3))
+            {
+                int j = query[key - 1].c;
+                row[query[key - 1].r][query[key - 1].c] = new ButtonO(query[key - 1].r, query[key - 1].c);
+                for (int r = query[key - 1].r + 1; r < 8; r++)
+                {
+                    j--;
+                    if (j < 0) break;
+                    if (row[r][j] is ButtonX)
+                        row[r][j] = new ButtonO(r, j);
+                    else if (row[r][j] is ButtonO)
+                        break;
+                }
+            }
             //drightup
+            if (findDrightup(query[key - 1].r, query[key - 1].c, 3))
+            {
+                int j = query[key - 1].r;
+                row[query[key - 1].r][query[key - 1].c] = new ButtonX(query[key - 1].r, query[key - 1].c);
+                for (int c = query[key - 1].c + 1; c < 8; c++)
+                {
+                    j--;
+                    if (j - 1 < 0) break;
+                    if (row[j][c] is ButtonO)
+                        row[j][c] = new ButtonX(j, c);
+                    else if (row[j][c] is ButtonX)
+                        break;
+                }
+            }
             //drightdown
+            if (findDrightdown(query[key - 1].r, query[key - 1].c, 3))
+            {
+                int j = query[key - 1].c;
+                row[query[key - 1].r][query[key - 1].c] = new ButtonX(query[key - 1].r, query[key - 1].c);
+                for (int r = query[key - 1].r + 1; r < 8; r++)
+                {
+                    j++;
+                    if (j + 1 > 7) break;
+                    if (row[r][j] is ButtonO)
+                        row[r][j] = new ButtonX(r, j);
+                    else if (row[r][j] is ButtonX)
+                        break;
+                }
+            }
         }
         public void ReverseOtoX(int key)
         {
@@ -182,14 +297,71 @@ namespace Tes_othello
                 }
             }
             //dleftup
+            if (findDleftup(query[key - 1].r, query[key - 1].c, 4))
+            {
+                int j = query[key - 1].c;
+                row[query[key - 1].r][query[key - 1].c] = new ButtonX(query[key - 1].r, query[key - 1].c);
+                for (int r = query[key - 1].r - 1; r >= 0; r--)
+                {
+                    j--;
+                    if (j - 1 < 0) break;
+                    if (row[r][j] is ButtonO)
+                        row[r][j] = new ButtonX(r, j);
+                    else if (row[r][j] is ButtonX)
+                        break;
+                }
+            }
             //dleftdown
+            if (findDleftdown(query[key - 1].r, query[key - 1].c, 4))
+            {
+                int j = query[key - 1].c;
+                row[query[key - 1].r][query[key - 1].c] = new ButtonX(query[key - 1].r, query[key - 1].c);
+                for (int r = query[key - 1].r + 1; r < 8; r++)
+                {
+                    j--;
+                    if (j - 1 < 0) break;
+                    if (row[r][j] is ButtonO)
+                        row[r][j] = new ButtonX(r, j);
+                    else if (row[r][j] is ButtonX)
+                        break;
+                }
+            }
             //drightup
+            if (findDrightup(query[key - 1].r, query[key - 1].c, 4))
+            {
+                int j = query[key - 1].r;
+                row[query[key - 1].r][query[key - 1].c] = new ButtonX(query[key - 1].r, query[key - 1].c);
+                for (int c = query[key - 1].c + 1; c < 8; c++)
+                {
+                    j--;
+                    if (j - 1 < 0) break;
+                    if (row[j][c] is ButtonO)
+                        row[j][c] = new ButtonX(j, c);
+                    else if (row[j][c] is ButtonX)
+                        break;
+                }
+            }
             //drightdown
+            if (findDrightdown(query[key - 1].r, query[key - 1].c, 4))
+            {
+                int j = query[key - 1].c;
+                row[query[key - 1].r][query[key - 1].c] = new ButtonX(query[key - 1].r, query[key - 1].c);
+                for (int r = query[key - 1].r + 1; r < 8; r++)
+                {
+                    j++;
+                    if (j + 1 > 7) break;
+                    if (row[r][j] is ButtonO)
+                        row[r][j] = new ButtonX(r, j);
+                    else if (row[r][j] is ButtonX)
+                        break;
+                }
+            }
         }
         public void fillQueryO()
         {
+            data dummy;
             Console.WriteLine("Choose Spot : ");
-            int idx = 1;
+            idx = 1;
             int yy;
             yy = 0;
             for(int i=0;i<8;i++)
@@ -198,201 +370,79 @@ namespace Tes_othello
                 {
                     if(!(row[i][j] is ButtonO) && !(row[i][j] is ButtonX))
                     {
+                        tmpy = Console.WindowHeight / 2 - 10 + yy;
                         Console.SetCursorPosition(Console.WindowWidth/2+20,Console.WindowHeight/2-10+yy);
-                        if(i==0 && j==0)
+                        if (findleft(i, j, 1))
                         {
-                            if (findright(i, j,1))
-                            {
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                hasQuery = true;
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (finddown(i, j,1))
-                            {
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                hasQuery = true;
-                                idx++;
-                            }
+                            hasQueryO = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if(i==0 && j<=6)
+                        else if (findright(i, j, 1))
                         {
-                            if (findleft(i, j,1))
-                            {
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                hasQuery = true;
-                                idx++;
-                            }
-                            else if (findright(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (finddown(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }  
+                            hasQueryO = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if(i==0 && j==7)
+                        else if (findup(i, j, 1))
                         {
-                            if (findleft(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (finddown(i,j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryO = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if(i<=6 && j==0)
+                        else if (finddown(i, j, 1))
                         {
-                            if (findright(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findup(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (finddown(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryO = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if(i==7 && j==0)
+                        else if (findDleftup(i, j, 1))
                         {
-                            if (findup(i,j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findright(i,j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryO = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if(i==7 && j<=6)
+                        else if (findDleftdown(i, j, 1))
                         {
-                            if (findleft(i,j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if(findup(i,j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if(findright(i,j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryO = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if(i==7 && j==7)
+                        else if (findDrightup(i, j, 1))
                         {
-                            if(findleft(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if(findup(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryO = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if (i <= 6 && j == 7)
+                        else if (findDrightdown(i, j, 1))
                         {
-                            if(findleft(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if(findup(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if(finddown(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                        }
-                        else
-                        {
-                            if(findleft(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if(findright(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if(findup(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if(finddown(i, j,1))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryO = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
                     }
                 }
@@ -400,8 +450,9 @@ namespace Tes_othello
         }
         public void fillQueryX()
         {
+            data dummy;
             Console.WriteLine("Choose Spot : ");
-            int idx = 1;
+            idx = 1;
             int yy;
             yy = 0;
             for (int i = 0; i < 8; i++)
@@ -410,201 +461,79 @@ namespace Tes_othello
                 {
                     if (!(row[i][j] is ButtonO) && !(row[i][j] is ButtonX))
                     {
+                        tmpy = Console.WindowHeight / 2 - 10 + yy;
                         Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 10 + yy);
-                        if (i == 0 && j == 0)
+                        if (findleft(i, j, 2))
                         {
-                            if (findright(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (finddown(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryX = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if (i == 0 && j <= 6)
+                        else if (findright(i, j, 2))
                         {
-                            if (findleft(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findright(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (finddown(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryX = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if (i == 0 && j == 7)
+                        else if (findup(i, j, 2))
                         {
-                            if (findleft(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (finddown(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryX = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if (i <= 6 && j == 0)
+                        else if (finddown(i, j, 2))
                         {
-                            if (findright(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findup(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (finddown(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryX = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if (i == 7 && j == 0)
+                        else if (findDleftup(i,j,2))
                         {
-                            if (findup(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findright(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryX = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if (i == 7 && j <= 6)
+                        else if (findDleftdown(i, j, 2))
                         {
-                            if (findleft(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findup(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findright(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryX = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if (i == 7 && j == 7)
+                        else if (findDrightup(i, j, 2))
                         {
-                            if (findleft(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findup(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryX = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
-                        else if (i <= 6 && j == 7)
+                        else if (findDrightdown(i, j, 2))
                         {
-                            if (findleft(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findup(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (finddown(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                        }
-                        else
-                        {
-                            if (findleft(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findright(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (findup(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
-                            else if (finddown(i, j, 2))
-                            {
-                                hasQuery = true;
-                                Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
-                                yy += 2;
-                                idx++;
-                            }
+                            hasQueryX = true;
+                            Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            dummy.r = i; dummy.c = j;
+                            coordinate.Enqueue(dummy);
+                            yy += 2;
+                            idx++;
                         }
                     }
                 }
@@ -622,7 +551,6 @@ namespace Tes_othello
             {
                 if (row[i][tmpj] is ButtonX)
                 {
-                    //Console.WriteLine(i + " "+(j-1));
                     for (int c = j - 2; c >= 0; c--)
                     {
                         if (flag == 1)
@@ -653,7 +581,6 @@ namespace Tes_othello
             {
                 if (row[i][tmpj] is ButtonO)
                 {
-                    //Console.WriteLine(i + " "+(j-1));
                     for (int c = j - 2; c >= 0; c--)
                     {
                         if (flag == 2)
@@ -892,45 +819,390 @@ namespace Tes_othello
             }
             return false;
         }
-        public void Oturn()
+        public bool findDleftup(int i, int j, int flag)
         {
-            int key;
-            Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 15);
-            Console.WriteLine("O turn");
-            Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 12);
-            fillQueryO();
-            if (hasQuery)
+            data dummy;
+            int tmpi = i, tmpj=j;
+            if (tmpj - 1 < 0 || tmpi - 1 < 0)
             {
-                Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2);
-                Console.Write("Choice : ");
-                key = int.Parse(Console.ReadLine());
-                ReverseXtoO(key);
+                tmpj = 0;
+                tmpi = i;
             }
             else
             {
-                Console.WriteLine("O Has No Move So it's X turn");
+                tmpj -= 1;
+                tmpi -= 1;
             }
-            query.Clear();
+            int k = tmpj;
+            if (flag == 1 || flag == 3)
+            {
+                if (row[tmpi][tmpj] is ButtonX)
+                {
+                    for (int r = tmpi - 1; r >= 0; r--)
+                    {
+                        k--;
+                        if (k < 0)
+                            break;
+                        if (flag == 1)
+                        {
+                            if (row[r][k] is ButtonX) continue;
+                            else if (!(row[r][k] is ButtonO))
+                                break;
+                            else
+                            {
+                                dummy.r = i;
+                                dummy.c = j;
+                                query.Add(dummy);
+                                return true;
+                            }
+                        }
+                        else if (flag == 3)
+                        {
+                            if (row[r][k] is ButtonX) continue;
+                            else if (!(row[r][k] is ButtonO))
+                                break;
+                            else
+                                return true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (row[tmpi][tmpj] is ButtonO)
+                {
+                    for (int r = tmpi-1; r >=0; r--)
+                    {
+                        k--;
+                        if (k < 0)
+                            break;
+                        if (flag == 2)
+                        {
+                            if (row[r][k] is ButtonO) continue;
+                            else if (!(row[r][k] is ButtonX))
+                                break;
+                            else
+                            {
+                                dummy.r = i;
+                                dummy.c = j;
+                                query.Add(dummy);
+                                return true;
+                            }
+                        }
+                        else if (flag == 4)
+                        {
+                            if (row[r][k] is ButtonO) continue;
+                            else if (!(row[r][k] is ButtonX))
+                                break;
+                            else
+                                return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        public bool findDleftdown(int i, int j, int flag)
+        {
+            data dummy;
+            int tmpi = i,tmpj=j;
+            if (tmpj - 1 < 0 || tmpi + 1 > 7)
+            {
+                tmpj = 0;
+                tmpi = i;
+            }
+            else
+            {
+                tmpj -= 1;
+                tmpi += 1;
+            }
+            int k = tmpj;
+            if (flag == 1 || flag == 3)
+            {
+                if (row[tmpi][tmpj] is ButtonX)
+                {
+                    for (int r = tmpi + 1; r < 8; r++)
+                    {
+                        k--;
+                        if (k < 0) break;
+                        if (flag == 1)
+                        {
+                            if (row[r][k] is ButtonX) continue;
+                            else if (!(row[r][k] is ButtonO))
+                                break;
+                            else
+                            {
+                                dummy.r = i;
+                                dummy.c = j;
+                                query.Add(dummy);
+                                return true;
+                            }
+                        }
+                        else if (flag == 3)
+                        {
+                            if (row[r][k] is ButtonX) continue;
+                            else if (!(row[r][k] is ButtonO))
+                                break;
+                            else
+                                return true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (row[tmpi][tmpj] is ButtonO)
+                {
+                    for (int r = tmpi + 1; r < 8; r++)
+                    {
+                        k--;
+                        if (k < 0) break;
+                        if (flag == 2)
+                        {
+                            if (row[r][k] is ButtonO) continue;
+                            else if (!(row[r][k] is ButtonX))
+                                break;
+                            else
+                            {
+                                dummy.r = i;
+                                dummy.c = j;
+                                query.Add(dummy);
+                                return true;
+                            }
+                        }
+                        else if (flag == 4)
+                        {
+                            if (row[r][k] is ButtonO) continue;
+                            else if (!(row[r][k] is ButtonX))
+                                break;
+                            else
+                                return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        public bool findDrightup(int i, int j, int flag)
+        {
+            data dummy;
+            int tmpi = i, tmpj = j;
+            if (tmpi - 1 < 0 || tmpj + 1 > 7)
+            {
+                tmpi = 0;
+                tmpj = j;
+            }
+            else
+            {
+                tmpi -= 1;
+                tmpj += 1;
+            }
+            int k = tmpi;
+            if (flag == 1 || flag == 3)
+            {
+                if (row[tmpi][tmpj] is ButtonX)
+                {
+                    for (int c = tmpi + 1; c < 8; c++)
+                    {
+                        k--;
+                        if (k < 0) break;
+                        if (flag == 1)
+                        {
+                            if (row[k][c] is ButtonX) continue;
+                            else if (!(row[k][c] is ButtonO))
+                                break;
+                            else
+                            {
+                                dummy.r = i;
+                                dummy.c = j;
+                                query.Add(dummy);
+                                return true;
+                            }
+                        }
+                        else if (flag == 3)
+                        {
+                            if (row[k][c] is ButtonX) continue;
+                            else if (!(row[k][c] is ButtonO))
+                                break;
+                            else
+                                return true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (row[tmpi][tmpj] is ButtonO)
+                {
+                    for (int c = tmpi + 1; c < 8; c++)
+                    {
+                        k--;
+                        if (k < 0) break;
+                        if (flag == 2)
+                        {
+                            if (row[k][c] is ButtonO) continue;
+                            else if (!(row[k][c] is ButtonX))
+                                break;
+                            else
+                            {
+                                dummy.r = i;
+                                dummy.c = j;
+                                query.Add(dummy);
+                                return true;
+                            }
+                        }
+                        else if (flag == 4)
+                        {
+                            if (row[k][c] is ButtonO) continue;
+                            else if (!(row[k][c] is ButtonX))
+                                break;
+                            else
+                                return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        public bool findDrightdown(int i, int j, int flag)
+        {
+            data dummy;
+            int tmpi = i, tmpj = j;
+            if (tmpj + 1 > 7 || tmpi + 1 > 7)
+            {
+                tmpj = j;
+                tmpi = i;
+            }
+            else
+            {
+                tmpj += 1;
+                tmpi += 1;
+            }
+            int k = tmpj;
+            if (flag == 1 || flag == 3)
+            {
+                if (row[tmpi][tmpj] is ButtonX)
+                {
+                    for (int r = tmpi + 1; r < 8; r++)
+                    {
+                        k++;
+                        if (k > 7)
+                            break;
+                        if (flag == 1)
+                        {
+                            if (row[r][k] is ButtonX) continue;
+                            else if (!(row[r][k] is ButtonO))
+                                break;
+                            else
+                            {
+                                dummy.r = i;
+                                dummy.c = j;
+                                query.Add(dummy);
+                                return true;
+                            }
+                        }
+                        else if (flag == 3)
+                        {
+                            if (row[r][k] is ButtonX) continue;
+                            else if (!(row[r][k] is ButtonO))
+                                break;
+                            else
+                                return true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (row[tmpi][tmpj] is ButtonO)
+                {
+                    for (int r = tmpi + 1; r < 8; r++)
+                    {
+                        k++;
+                        if (k > 7)
+                            break;
+                        if (flag == 2)
+                        {
+                            if (row[r][k] is ButtonO) continue;
+                            else if (!(row[r][k] is ButtonX))
+                                break;
+                            else
+                            {
+                                dummy.r = i;
+                                dummy.c = j;
+                                query.Add(dummy);
+                                return true;
+                            }
+                        }
+                        else if (flag == 4)
+                        {
+                            if (row[r][k] is ButtonO) continue;
+                            else if (!(row[r][k] is ButtonX))
+                                break;
+                            else
+                                return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        public void Oturn()
+        {
+            int key;
+            while (true)
+            {
+                Console.Clear();
+                Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 15);
+                Console.WriteLine("O turn");
+                Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 12);
+                fillQueryO();
+                PrintBoard();
+                if (hasQueryO)
+                {
+                    Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 3);
+                    Console.Write("Choice : ");
+                    key = int.Parse(Console.ReadLine());
+                    if (key <= idx - 1)
+                    {
+                        ReverseXtoO(key);
+                        query.Clear();
+                        break;
+                    }
+                }
+                else
+                    break;
+                query.Clear();
+            }
         }
         public void Xturn()
         {
             int key;
-            Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 15);
-            Console.WriteLine("X turn");
-            Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 12);
-            fillQueryX();
-            if (hasQuery)
+            while (true)
             {
-                Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2);
-                Console.Write("Choice : ");
-                key = int.Parse(Console.ReadLine());
-                ReverseOtoX(key);
+                Console.Clear();
+                Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 15);
+                Console.WriteLine("X turn");
+                Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 12);
+                fillQueryX();
+                PrintBoard();
+                if (hasQueryX)
+                {
+                    Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 3);
+                    Console.Write("Choice : ");
+                    key = int.Parse(Console.ReadLine());
+                    if (key <= idx - 1)
+                    {
+                        ReverseOtoX(key);
+                        query.Clear();
+                        break;
+                    }
+                }
+                else
+                    break;
+                query.Clear();
             }
-            else
-            {
-                Console.WriteLine("X Has No Move So it's O turn");
-            }
-            query.Clear();
+            
         }
         public void Arena()
         {
