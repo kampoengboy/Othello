@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI_Mode.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="ButtonO.cs" />
     <Compile Include="ButtonX.cs" />

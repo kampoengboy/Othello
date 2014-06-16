@@ -4,32 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
-
+using System.Threading;
 namespace Tes_othello
 {
-    class Board
+    class AI_Mode
     {
         public struct data
         {
-            public int r,c;
+            public int r, c;
         }
         int idx;
         int tmpy;
         public int scoreO, scoreX;
-        public bool hasQueryO=false;
+        public bool hasQueryO = false;
         public bool hasQueryX = false;
         public List<data> query = new List<data>();
         public Queue<data> coordinate = new Queue<data>();
         public Button[] col;
         public List<Button[]> row = new List<Button[]>(); //Polymorphism
-        public int y = Console.WindowHeight / 2 -5;
+        public int y = Console.WindowHeight / 2 - 5;
         public int x = Console.WindowWidth / 2 - 20;
         public void newBoard()
         {
-            for (int i = 0; i < 8; i++ )
+            for (int i = 0; i < 8; i++)
             {
                 Button[] col = new Button[8];
-                for(int j=0;j<8;j++)
+                for (int j = 0; j < 8; j++)
                 {
                     if ((i == 3 && j == 3) || (i == 4 && j == 4))
                         col[j] = new ButtonX(i, j);
@@ -42,9 +42,9 @@ namespace Tes_othello
         public void scoreboard()
         {
             scoreO = 0; scoreX = 0;
-            for(int i=0;i<8;i++)
+            for (int i = 0; i < 8; i++)
             {
-                for(int j=0;j<8;j++)
+                for (int j = 0; j < 8; j++)
                 {
                     if (row[i][j] is ButtonO)
                         scoreO++;
@@ -52,23 +52,23 @@ namespace Tes_othello
                         scoreX++;
                 }
             }
-            Console.SetCursorPosition(0,Console.WindowHeight-8);
-            for(int i=0;i<Console.WindowWidth;i++)
+            Console.SetCursorPosition(0, Console.WindowHeight - 8);
+            for (int i = 0; i < Console.WindowWidth; i++)
             {
                 Console.Write("-");
             }
-            Console.SetCursorPosition(Console.WindowWidth/2-6, Console.WindowHeight - 7);
+            Console.SetCursorPosition(Console.WindowWidth / 2 - 6, Console.WindowHeight - 7);
             Console.Write("SCORE");
             Console.SetCursorPosition(4, Console.WindowHeight - 5);
-            Console.Write("O = {0}",scoreO);
-            Console.SetCursorPosition(Console.WindowWidth-10, Console.WindowHeight - 5);
+            Console.Write("O = {0}", scoreO);
+            Console.SetCursorPosition(Console.WindowWidth - 10, Console.WindowHeight - 5);
             Console.Write("X = {0}", scoreX);
         }
         public bool Allfilled()
         {
-            for(int i=0;i<8;i++)
+            for (int i = 0; i < 8; i++)
             {
-                for(int j=0;j<8;j++)
+                for (int j = 0; j < 8; j++)
                 {
                     if (!(row[i][j] is ButtonO) && !(row[i][j] is ButtonX))
                         return false;
@@ -78,55 +78,55 @@ namespace Tes_othello
         }
         public void PrintBoard()
         {
-            int cc=0;
+            int cc = 0;
             Console.SetCursorPosition(Console.WindowWidth / 2 - 8, 1);
             Console.WriteLine("OTHELLO");
-            Console.SetCursorPosition(22,27);
+            Console.SetCursorPosition(22, 27);
             Console.Write("ROW");
-            Console.SetCursorPosition(43,7);
+            Console.SetCursorPosition(43, 7);
             Console.Write("COLUMN");
             Arena();
             int idxX, idxY;
             int num = 1;
-            int c=4;
+            int c = 4;
             idxY = Console.WindowHeight / 2 - 13;
             idxX = Console.WindowWidth / 2 - 18;
             Console.SetCursorPosition(idxX, idxY);
             for (int i = 0; i < 8; i++)
             {
-               foreach (Button j in row[i])
-               {
-                   if (coordinate.Count > 0)
-                   {
-                       if (coordinate.Peek().r == i && coordinate.Peek().c == cc)
-                       {
-                           Console.SetCursorPosition(idxX+c-5,idxY);
-                           Console.Write("("+num+")");
-                           num++;
-                           coordinate.Dequeue();
-                       }
-                       else
-                       {
-                           if (j is ButtonO)
-                               Console.Write(((ButtonO)j).button);
-                           else if (j is ButtonX)
-                               Console.Write(((ButtonX)j).button);
-                           else
-                               Console.Write(" ");
-                       }
-                   }
-                   else
-                   {
-                       if (j is ButtonO)
-                           Console.Write(((ButtonO)j).button);
-                       else if (j is ButtonX)
-                           Console.Write(((ButtonX)j).button);
-                       else
-                           Console.Write(" ");
-                   }
-                   Console.SetCursorPosition(idxX + c, idxY);
-                   c += 4;
-                   cc++;
+                foreach (Button j in row[i])
+                {
+                    if (coordinate.Count > 0)
+                    {
+                        if (coordinate.Peek().r == i && coordinate.Peek().c == cc)
+                        {
+                            Console.SetCursorPosition(idxX + c - 5, idxY);
+                            Console.Write("(" + num + ")");
+                            num++;
+                            coordinate.Dequeue();
+                        }
+                        else
+                        {
+                            if (j is ButtonO)
+                                Console.Write(((ButtonO)j).button);
+                            else if (j is ButtonX)
+                                Console.Write(((ButtonX)j).button);
+                            else
+                                Console.Write(" ");
+                        }
+                    }
+                    else
+                    {
+                        if (j is ButtonO)
+                            Console.Write(((ButtonO)j).button);
+                        else if (j is ButtonX)
+                            Console.Write(((ButtonX)j).button);
+                        else
+                            Console.Write(" ");
+                    }
+                    Console.SetCursorPosition(idxX + c, idxY);
+                    c += 4;
+                    cc++;
                 }
                 cc = 0;
                 idxY += 4;
@@ -138,14 +138,14 @@ namespace Tes_othello
         public void ReverseXtoO(int key)
         {
             //left
-            if(findleft(query[key-1].r,query[key-1].c,3))
+            if (findleft(query[key - 1].r, query[key - 1].c, 3))
             {
                 row[query[key - 1].r][query[key - 1].c] = new ButtonO(query[key - 1].r, query[key - 1].c);
-                for(int c=query[key-1].c-1;c>=0;c--)
+                for (int c = query[key - 1].c - 1; c >= 0; c--)
                 {
                     if (row[query[key - 1].r][c] is ButtonX)
                         row[query[key - 1].r][c] = new ButtonO(query[key - 1].r, c);
-                    else if (row[query[key-1].r][c] is ButtonO)
+                    else if (row[query[key - 1].r][c] is ButtonO)
                         break;
                 }
             }
@@ -157,7 +157,7 @@ namespace Tes_othello
                 {
                     if (row[query[key - 1].r][c] is ButtonX)
                         row[query[key - 1].r][c] = new ButtonO(query[key - 1].r, c);
-                    else if (row[query[key-1].r][c] is ButtonO)
+                    else if (row[query[key - 1].r][c] is ButtonO)
                         break;
                 }
             }
@@ -167,9 +167,9 @@ namespace Tes_othello
                 row[query[key - 1].r][query[key - 1].c] = new ButtonO(query[key - 1].r, query[key - 1].c);
                 for (int r = query[key - 1].r - 1; r >= 0; r--)
                 {
-                    if (row[r][query[key-1].c] is ButtonX)
-                        row[r][query[key-1].c] = new ButtonO(r, query[key-1].c);
-                    else if (row[r][query[key-1].c] is ButtonO)
+                    if (row[r][query[key - 1].c] is ButtonX)
+                        row[r][query[key - 1].c] = new ButtonO(r, query[key - 1].c);
+                    else if (row[r][query[key - 1].c] is ButtonO)
                         break;
                 }
             }
@@ -193,7 +193,7 @@ namespace Tes_othello
                 for (int r = query[key - 1].r - 1; r >= 0; r--)
                 {
                     j--;
-                    if(j<0) break;
+                    if (j < 0) break;
                     if (row[r][j] is ButtonX)
                         row[r][j] = new ButtonO(r, j);
                     else if (row[r][j] is ButtonO)
@@ -256,7 +256,7 @@ namespace Tes_othello
                 {
                     if (row[query[key - 1].r][c] is ButtonO)
                         row[query[key - 1].r][c] = new ButtonX(query[key - 1].r, c);
-                    else if (row[query[key-1].r][c] is ButtonX)
+                    else if (row[query[key - 1].r][c] is ButtonX)
                         break;
                 }
             }
@@ -268,7 +268,7 @@ namespace Tes_othello
                 {
                     if (row[query[key - 1].r][c] is ButtonO)
                         row[query[key - 1].r][c] = new ButtonX(query[key - 1].r, c);
-                    else if (row[query[key-1].r][c] is ButtonX)
+                    else if (row[query[key - 1].r][c] is ButtonX)
                         break;
                 }
             }
@@ -364,14 +364,14 @@ namespace Tes_othello
             idx = 1;
             int yy;
             yy = 0;
-            for(int i=0;i<8;i++)
+            for (int i = 0; i < 8; i++)
             {
-                for(int j=0;j<8;j++)
+                for (int j = 0; j < 8; j++)
                 {
-                    if(!(row[i][j] is ButtonO) && !(row[i][j] is ButtonX))
+                    if (!(row[i][j] is ButtonO) && !(row[i][j] is ButtonX))
                     {
                         tmpy = Console.WindowHeight / 2 - 10 + yy;
-                        Console.SetCursorPosition(Console.WindowWidth/2+20,Console.WindowHeight/2-10+yy);
+                        Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 10 + yy);
                         if (findleft(i, j, 1))
                         {
                             hasQueryO = true;
@@ -499,7 +499,7 @@ namespace Tes_othello
                             yy += 2;
                             idx++;
                         }
-                        else if (findDleftup(i,j,2))
+                        else if (findDleftup(i, j, 2))
                         {
                             hasQueryX = true;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
@@ -539,7 +539,7 @@ namespace Tes_othello
                 }
             }
         }
-        public bool findleft(int i,int j,int flag)
+        public bool findleft(int i, int j, int flag)
         {
             data dummy;
             int tmpj = j;
@@ -547,7 +547,7 @@ namespace Tes_othello
                 tmpj = 0;
             else
                 tmpj -= 1;
-            if (flag == 1 || flag==3)
+            if (flag == 1 || flag == 3)
             {
                 if (row[i][tmpj] is ButtonX)
                 {
@@ -577,7 +577,7 @@ namespace Tes_othello
                     }
                 }
             }
-            else if(flag==2 || flag==4)
+            else if (flag == 2 || flag == 4)
             {
                 if (row[i][tmpj] is ButtonO)
                 {
@@ -647,7 +647,7 @@ namespace Tes_othello
                     }
                 }
             }
-            else if(flag==2 || flag==4)
+            else if (flag == 2 || flag == 4)
             {
                 if (row[i][tmpj] is ButtonO)
                 {
@@ -683,7 +683,7 @@ namespace Tes_othello
         {
             data dummy;
             int tmpi = i;
-            if (tmpi -1 < 0)
+            if (tmpi - 1 < 0)
                 tmpi = 0;
             else
                 tmpi -= 1;
@@ -822,7 +822,7 @@ namespace Tes_othello
         public bool findDleftup(int i, int j, int flag)
         {
             data dummy;
-            int tmpi = i, tmpj=j;
+            int tmpi = i, tmpj = j;
             if (tmpj - 1 < 0 || tmpi - 1 < 0)
             {
                 tmpj = 0;
@@ -871,7 +871,7 @@ namespace Tes_othello
             {
                 if (row[tmpi][tmpj] is ButtonO)
                 {
-                    for (int r = tmpi-1; r >=0; r--)
+                    for (int r = tmpi - 1; r >= 0; r--)
                     {
                         k--;
                         if (k < 0)
@@ -905,7 +905,7 @@ namespace Tes_othello
         public bool findDleftdown(int i, int j, int flag)
         {
             data dummy;
-            int tmpi = i,tmpj=j;
+            int tmpi = i, tmpj = j;
             if (tmpj - 1 < 0 || tmpi + 1 > 7)
             {
                 tmpj = 0;
@@ -1177,6 +1177,7 @@ namespace Tes_othello
         }
         public void Xturn()
         {
+            Random a = new Random();
             int key;
             while (true)
             {
@@ -1189,14 +1190,13 @@ namespace Tes_othello
                 if (hasQueryX)
                 {
                     Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 3);
-                    Console.Write("Choice : ");
-                    key = int.Parse(Console.ReadLine());
-                    if (key <= idx - 1)
-                    {
-                        ReverseOtoX(key);
-                        query.Clear();
-                        break;
-                    }
+                    key = a.Next(1, idx);
+                    Thread.Sleep(1000);
+                    Console.Write("Computer Choose List {0}",key);
+                    Console.ReadKey();
+                    ReverseOtoX(key);
+                    query.Clear();
+                    break;
                 }
                 else
                     break;
@@ -1237,7 +1237,7 @@ namespace Tes_othello
             }
             y = Console.WindowHeight / 2 - 17;
             x = Console.WindowWidth / 2 - 18;
-            for(int i=1;i<=8;i++)
+            for (int i = 1; i <= 8; i++)
             {
                 Console.SetCursorPosition(x, y);
                 Console.Write(i);
