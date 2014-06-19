@@ -34,14 +34,19 @@ namespace Tes_othello
                         break;
                 }
             }
-            othello.PrintBoard();
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 4, Console.WindowHeight - 5);
+            Console.Clear();
+            Console.SetCursorPosition(Console.WindowWidth / 2 - 4, Console.WindowHeight / 2 - 5);
             if (othello.scoreO > othello.scoreX)
                 Console.Write("O WIN");
             else if (othello.scoreO < othello.scoreX)
                 Console.Write("X WIN");
             else
                 Console.Write("DRAW");
+            Console.SetCursorPosition(Console.WindowWidth / 2 - 18, Console.WindowHeight / 2 - 3);
+            Console.Write("PRESS ENTER TO SEE THE BOARD..!!!");
+            Console.ReadKey();
+            Console.Clear();
+            othello.PrintBoard();
             Console.ReadKey();
         }
         public static void PvP()
@@ -69,14 +74,19 @@ namespace Tes_othello
                         break;
                 }
             }
-            othello.PrintBoard();
-            Console.SetCursorPosition(Console.WindowWidth / 2 - 4, Console.WindowHeight - 5);
+            Console.Clear();
+            Console.SetCursorPosition(Console.WindowWidth/2 -4 ,Console.WindowHeight/2 - 5);
             if (othello.scoreO > othello.scoreX)
                 Console.Write("O WIN");
             else if (othello.scoreO < othello.scoreX)
                 Console.Write("X WIN");
             else
                 Console.Write("DRAW");
+            Console.SetCursorPosition(Console.WindowWidth / 2 - 18, Console.WindowHeight / 2 - 3);
+            Console.Write("PRESS ENTER TO SEE THE BOARD..!!!");
+            Console.ReadKey();
+            Console.Clear();
+            othello.PrintBoard();
             Console.ReadKey();
         }
 
@@ -85,6 +95,7 @@ namespace Tes_othello
             string flag;
             Console.SetWindowSize(100, 53);
             Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.DarkCyan;
             Console.Title = "OTHELLO";
             while (true)
             {

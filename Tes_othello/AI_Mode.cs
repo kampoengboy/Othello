@@ -53,6 +53,7 @@ namespace Tes_othello
                 }
             }
             Console.SetCursorPosition(0, Console.WindowHeight - 8);
+            Console.BackgroundColor = ConsoleColor.DarkCyan;
             for (int i = 0; i < Console.WindowWidth; i++)
             {
                 Console.Write("-");
@@ -100,7 +101,9 @@ namespace Tes_othello
                     {
                         if (coordinate.Peek().r == i && coordinate.Peek().c == cc)
                         {
+                            Console.BackgroundColor = ConsoleColor.DarkCyan;
                             Console.SetCursorPosition(idxX + c - 5, idxY);
+                            Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.Write("(" + num + ")");
                             num++;
                             coordinate.Dequeue();
@@ -108,25 +111,45 @@ namespace Tes_othello
                         else
                         {
                             if (j is ButtonO)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Black;
+                                Console.BackgroundColor = ConsoleColor.DarkCyan;
                                 Console.Write(((ButtonO)j).button);
+                            }
                             else if (j is ButtonX)
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkCyan;
                                 Console.Write(((ButtonX)j).button);
+                            }
                             else
+                            {
+                                Console.BackgroundColor = ConsoleColor.DarkCyan;
                                 Console.Write(" ");
+                            }
                         }
                     }
                     else
                     {
                         if (j is ButtonO)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            Console.BackgroundColor = ConsoleColor.DarkCyan;
                             Console.Write(((ButtonO)j).button);
+                        }
                         else if (j is ButtonX)
+                        {
+                            Console.BackgroundColor = ConsoleColor.DarkCyan;
                             Console.Write(((ButtonX)j).button);
-                        else
+                        }
+                        {
+                            Console.BackgroundColor = ConsoleColor.DarkCyan;
                             Console.Write(" ");
+                        }
                     }
                     Console.SetCursorPosition(idxX + c, idxY);
                     c += 4;
                     cc++;
+                    Console.ResetColor();
                 }
                 cc = 0;
                 idxY += 4;
@@ -1170,6 +1193,7 @@ namespace Tes_othello
                 if (hasQueryO)
                 {
                     Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 3);
+                    Console.BackgroundColor = ConsoleColor.DarkCyan;
                     Console.Write("Choice : ");
                     key = Console.ReadLine();
                     if (key != "" && isNum(key))
