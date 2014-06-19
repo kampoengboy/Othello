@@ -1147,9 +1147,18 @@ namespace Tes_othello
             }
             return false;
         }
+        public bool isNum(string x)
+        {
+            for (int i = 0; i < x.Length; i++)
+            {
+                if (x[i] < '0' || x[i] > '9')
+                    return false;
+            }
+            return true;
+        }
         public void Oturn()
         {
-            int key;
+            string key;
             while (true)
             {
                 Console.Clear();
@@ -1162,12 +1171,15 @@ namespace Tes_othello
                 {
                     Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 3);
                     Console.Write("Choice : ");
-                    key = int.Parse(Console.ReadLine());
-                    if (key <= idx - 1)
+                    key = Console.ReadLine();
+                    if (key != "" && isNum(key))
                     {
-                        ReverseXtoO(key);
-                        query.Clear();
-                        break;
+                        if (Convert.ToInt32(key) <= idx - 1)
+                        {
+                            ReverseXtoO(Convert.ToInt32(key));
+                            query.Clear();
+                            break;
+                        }
                     }
                 }
                 else

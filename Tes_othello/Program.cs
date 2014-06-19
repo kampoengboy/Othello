@@ -82,7 +82,7 @@ namespace Tes_othello
 
         static void Main(string[] args)
         {
-            int flag;
+            string flag;
             Console.SetWindowSize(100, 53);
             Console.ForegroundColor = ConsoleColor.White;
             Console.Title = "OTHELLO";
@@ -107,12 +107,12 @@ namespace Tes_othello
                 Console.WriteLine("1. Player Vs Computer (Player as O)");
                 Console.WriteLine("2. Player Vs Player");
                 Console.Write("Choose : ");
-                flag = int.Parse(Console.ReadLine());
+                flag = Console.ReadLine();
                 switch(flag)
                 {
-                    case 0: return;
-                    case 1: Console.Clear(); AI(); return;
-                    case 2: Console.Clear(); PvP(); return;
+                    case "0": return;
+                    case "1": Console.Clear(); AI(); return;
+                    case "2": Console.Clear(); PvP(); return;
                     default: Console.WriteLine("There is no such Choice..!! Try Again..!!!"); break;
                 }
             }
