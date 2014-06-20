@@ -393,12 +393,12 @@ namespace Tes_othello
                 {
                     if (!(row[i][j] is ButtonO) && !(row[i][j] is ButtonX))
                     {
-                        tmpy = Console.WindowHeight / 2 - 10 + yy;
                         Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 10 + yy);
                         if (findleft(i, j, 1))
                         {
                             hasQueryO = true;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
                             yy += 2;
@@ -407,6 +407,7 @@ namespace Tes_othello
                         else if (findright(i, j, 1))
                         {
                             hasQueryO = true;
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
@@ -416,6 +417,7 @@ namespace Tes_othello
                         else if (findup(i, j, 1))
                         {
                             hasQueryO = true;
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
@@ -425,6 +427,7 @@ namespace Tes_othello
                         else if (finddown(i, j, 1))
                         {
                             hasQueryO = true;
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
@@ -434,6 +437,7 @@ namespace Tes_othello
                         else if (findDleftup(i, j, 1))
                         {
                             hasQueryO = true;
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
@@ -443,6 +447,7 @@ namespace Tes_othello
                         else if (findDleftdown(i, j, 1))
                         {
                             hasQueryO = true;
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
@@ -452,6 +457,7 @@ namespace Tes_othello
                         else if (findDrightup(i, j, 1))
                         {
                             hasQueryO = true;
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
@@ -461,6 +467,7 @@ namespace Tes_othello
                         else if (findDrightdown(i, j, 1))
                         {
                             hasQueryO = true;
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
@@ -484,13 +491,13 @@ namespace Tes_othello
                 {
                     if (!(row[i][j] is ButtonO) && !(row[i][j] is ButtonX))
                     {
-                        tmpy = Console.WindowHeight / 2 - 10 + yy;
                         Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 10 + yy);
                         if (findleft(i, j, 2))
                         {
                             hasQueryX = true;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             coordinate.Enqueue(dummy);
                             yy += 2;
                             idx++;
@@ -500,6 +507,7 @@ namespace Tes_othello
                             hasQueryX = true;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             coordinate.Enqueue(dummy);
                             yy += 2;
                             idx++;
@@ -509,6 +517,7 @@ namespace Tes_othello
                             hasQueryX = true;
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             coordinate.Enqueue(dummy);
                             yy += 2;
                             idx++;
@@ -519,6 +528,7 @@ namespace Tes_othello
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             yy += 2;
                             idx++;
                         }
@@ -528,6 +538,7 @@ namespace Tes_othello
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             yy += 2;
                             idx++;
                         }
@@ -537,6 +548,7 @@ namespace Tes_othello
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             yy += 2;
                             idx++;
                         }
@@ -546,6 +558,7 @@ namespace Tes_othello
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             yy += 2;
                             idx++;
                         }
@@ -555,6 +568,7 @@ namespace Tes_othello
                             Console.WriteLine("({0}). Row = {1} , Column = {2}", idx, i + 1, j + 1);
                             dummy.r = i; dummy.c = j;
                             coordinate.Enqueue(dummy);
+                            tmpy = Console.WindowHeight / 2 - 10 + yy;
                             yy += 2;
                             idx++;
                         }
@@ -1192,13 +1206,13 @@ namespace Tes_othello
                 PrintBoard();
                 if (hasQueryO)
                 {
-                    Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 3);
+                    Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 2);
                     Console.BackgroundColor = ConsoleColor.DarkCyan;
                     Console.Write("Choice : ");
                     key = Console.ReadLine();
-                    if (key != "" && isNum(key))
+                    if (key != "" && isNum(key) && key.Length<=10)
                     {
-                        if (Convert.ToInt32(key) <= idx - 1)
+                        if (Convert.ToInt32(key) <= idx - 1 && Convert.ToInt32(key) >= 1)
                         {
                             ReverseXtoO(Convert.ToInt32(key));
                             query.Clear();
@@ -1225,7 +1239,7 @@ namespace Tes_othello
                 PrintBoard();
                 if (hasQueryX)
                 {
-                    Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 3);
+                    Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 2);
                     key = a.Next(1, idx);
                     Thread.Sleep(1000);
                     Console.Write("Computer Choose List {0}",key);
