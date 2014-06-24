@@ -96,18 +96,74 @@ namespace Tes_othello
             string flag;
             Console.SetWindowPosition(0, 0);
             Console.SetWindowSize(120, 65);
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.BackgroundColor = ConsoleColor.DarkCyan;
-            Console.Title = "OTHELLO";
-            while (true)
+            do
             {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.DarkCyan;
+                Console.Title = "OTHELLO";
+                while (true)
+                {
+                    Console.Clear();
+                    Console.SetCursorPosition(Console.WindowWidth / 2 - 5, 3);
+                    Console.WriteLine("OTHELLO");
+                    Console.SetCursorPosition(Console.WindowWidth / 2 - 15, 5);
+                    Console.WriteLine("CHOOSE PLAY MODE OR 0 TO QUIT");
+                    Console.SetCursorPosition(0, 8);
+                    for (int i = 0; i < Console.WindowWidth; i++)
+                    {
+                        Console.Write("=");
+                    }
+                    Console.SetCursorPosition(0, 19);
+                    for (int i = 0; i < Console.WindowWidth; i++)
+                    {
+                        Console.Write("=");
+                    }
+                    Console.SetCursorPosition(0, 12);
+                    Console.WriteLine("1. Player Vs Computer (Player as O)");
+                    Console.WriteLine("2. Player Vs Player");
+                    Console.Write("Choose : ");
+                    bool inputComplete = false;
+                    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+                    while (!inputComplete)
+                    {
+                        System.ConsoleKeyInfo key = System.Console.ReadKey(true);
+                        if (key.Key == System.ConsoleKey.Enter)
+                        {
+                            inputComplete = true;
+                        }
+                        else if (char.IsDigit(key.KeyChar) || key.Key == ConsoleKey.Backspace)
+                        {
+                            if (char.IsDigit(key.KeyChar) && sb.Length < 1)
+                            {
+                                sb.Append(key.KeyChar);
+                                System.Console.Write(key.KeyChar.ToString());
+                            }
+                            else if (key.Key == ConsoleKey.Backspace)
+                            {
+                                if (sb.Length > 0)
+                                {
+                                    sb.Remove(sb.Length - 1, 1);
+                                    System.Console.Write("\b \b");
+                                }
+                            }
+                        }
+                    }
+                    flag = sb.ToString();
+                    switch (flag)
+                    {
+                        case "0": return;
+                        case "1": Console.Clear(); AI(); break;
+                        case "2": Console.Clear(); PvP(); break;
+                        default: Console.WriteLine("There is no such Choice..!! Try Again..!!!"); break;
+                    }
+                    if (flag == "1" || flag == "2")
+                        break;
+                }
                 Console.Clear();
-                Console.SetCursorPosition(Console.WindowWidth/2-5,3);
+                Console.SetCursorPosition(Console.WindowWidth / 2 - 5, 3);
                 Console.WriteLine("OTHELLO");
-                Console.SetCursorPosition(Console.WindowWidth/2-15,5);
-                Console.WriteLine("CHOOSE PLAY MODE OR 0 TO QUIT");
                 Console.SetCursorPosition(0, 8);
-                for (int i = 0; i < Console.WindowWidth;i++ )
+                for (int i = 0; i < Console.WindowWidth; i++)
                 {
                     Console.Write("=");
                 }
@@ -117,18 +173,37 @@ namespace Tes_othello
                     Console.Write("=");
                 }
                 Console.SetCursorPosition(0, 12);
-                Console.WriteLine("1. Player Vs Computer (Player as O)");
-                Console.WriteLine("2. Player Vs Player");
-                Console.Write("Choose : ");
-                flag = Console.ReadLine();
-                switch(flag)
+                Console.Write("TRY AGAIN ? (Y/N) : ");
+                bool Complete = false;
+                System.Text.StringBuilder ss = new System.Text.StringBuilder();
+                while (!Complete)
                 {
-                    case "0": return;
-                    case "1": Console.Clear(); AI(); return;
-                    case "2": Console.Clear(); PvP(); return;
-                    default: Console.WriteLine("There is no such Choice..!! Try Again..!!!"); break;
+                    System.ConsoleKeyInfo key = System.Console.ReadKey(true);
+                    if (key.Key == System.ConsoleKey.Enter)
+                    {
+                        Complete = true;
+                    }
+                    else if (key.Key== ConsoleKey.Y || key.Key==ConsoleKey.N || key.Key == ConsoleKey.Backspace)
+                    {
+                        if ((key.Key==ConsoleKey.Y || key.Key==ConsoleKey.N) && ss.Length < 1)
+                        {
+                            ss.Append(key.KeyChar);
+                            System.Console.Write(key.KeyChar.ToString());
+                        }
+                        else if (key.Key == ConsoleKey.Backspace)
+                        {
+                            if (ss.Length > 0)
+                            {
+                                ss.Remove(ss.Length - 1, 1);
+                                System.Console.Write("\b \b");
+                            }
+                        }
+                    }
                 }
-            }
+                flag = ss.ToString();
+                if (flag == "N" || flag == "n")
+                    break;
+            } while (true);
         }
     }
 }
