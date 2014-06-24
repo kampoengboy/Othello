@@ -1217,14 +1217,25 @@ namespace Tes_othello
                         {
                             inputComplete = true;
                         }
-                        else if (char.IsDigit(key.KeyChar))
+                        else if (char.IsDigit(key.KeyChar) || key.Key == ConsoleKey.Backspace)
                         {
-                            sb.Append(key.KeyChar);
-                            System.Console.Write(key.KeyChar.ToString());
+                            if (char.IsDigit(key.KeyChar) && sb.Length<2)
+                            {
+                                sb.Append(key.KeyChar);
+                                System.Console.Write(key.KeyChar.ToString());
+                            }
+                            else if(key.Key==ConsoleKey.Backspace)
+                            {
+                                if (sb.Length > 0)
+                                {
+                                    sb.Remove(sb.Length - 1, 1);
+                                    System.Console.Write("\b \b");
+                                }
+                            }
                         }
                     }
                     flag = sb.ToString();
-                    if (flag != "" && flag.Length <= 2)
+                    if (flag != "")
                     {
                         if (Convert.ToInt32(flag) <= idx - 1 && Convert.ToInt32(flag) >= 1)
                         {
