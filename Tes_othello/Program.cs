@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Windows;
 
 namespace Tes_othello
 {
@@ -93,7 +94,8 @@ namespace Tes_othello
         static void Main(string[] args)
         {
             string flag;
-            Console.SetWindowSize(100, 53);
+            Console.SetWindowPosition(0, 0);
+            Console.SetWindowSize(120, 65);
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.DarkCyan;
             Console.Title = "OTHELLO";
