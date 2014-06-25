@@ -89,10 +89,6 @@ namespace Tes_othello
             int cc = 0;
             Console.SetCursorPosition(Console.WindowWidth / 2 - 8, 1);
             Console.WriteLine("OTHELLO");
-            Console.SetCursorPosition(30, 27);
-            Console.Write("ROW");
-            Console.SetCursorPosition(54, 7);
-            Console.Write("COLUMN");
             Arena();
             int idxX, idxY;
             int num = 1;
