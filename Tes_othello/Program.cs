@@ -94,8 +94,7 @@ namespace Tes_othello
         static void Main(string[] args)
         {
             string flag;
-            Console.SetWindowPosition(0, 0);
-            Console.SetWindowSize(120, 65);
+            Console.SetWindowSize(120, Console.LargestWindowHeight);
             do
             {
                 Console.ForegroundColor = ConsoleColor.White;
