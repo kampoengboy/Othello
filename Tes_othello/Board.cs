@@ -1193,15 +1193,18 @@ namespace Tes_othello
             while (true)
             {
                 Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Black;
                 Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 20);
                 Console.WriteLine("O turn");
                 Console.SetCursorPosition(Console.WindowWidth / 2 + 20, Console.WindowHeight / 2 - 17);
                 fillQueryO();
+                Console.ForegroundColor = ConsoleColor.White;
                 PrintBoard();
                 if (hasQueryO)
                 {
-                    Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy+2);
+                    Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 2);
                     Console.BackgroundColor = ConsoleColor.DarkCyan;
+                    Console.ForegroundColor = ConsoleColor.Black;
                     Console.Write("Choice : ");
                     bool inputComplete = false;
                     System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -1213,7 +1216,7 @@ namespace Tes_othello
                         {
                             inputComplete = true;
                         }
-                        else if (char.IsDigit(key.KeyChar) || key.Key==ConsoleKey.Backspace)
+                        else if (char.IsDigit(key.KeyChar) || key.Key == ConsoleKey.Backspace)
                         {
                             if (char.IsDigit(key.KeyChar) && sb.Length < 2)
                             {
@@ -1230,8 +1233,8 @@ namespace Tes_othello
                             }
                         }
                     }
-                    flag=sb.ToString();
-                    if (flag!= "")
+                    flag = sb.ToString();
+                    if (flag != "")
                     {
                         if (Convert.ToInt32(flag) <= idx - 1 && Convert.ToInt32(flag) >= 1)
                         {
@@ -1245,6 +1248,7 @@ namespace Tes_othello
                     break;
                 query.Clear();
             }
+            Console.ForegroundColor = ConsoleColor.White;
         }
         public void Xturn()
         {
