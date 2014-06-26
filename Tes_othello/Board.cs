@@ -245,7 +245,7 @@ namespace Tes_othello
             if (findDrightup(query[key - 1].r, query[key - 1].c, 3))
             {
                 int j = query[key - 1].r;
-                row[query[key - 1].r][query[key - 1].c] = new ButtonX(query[key - 1].r, query[key - 1].c);
+                row[query[key - 1].r][query[key - 1].c] = new ButtonO(query[key - 1].r, query[key - 1].c);
                 for (int c = query[key - 1].c + 1; c < 8; c++)
                 {
                     j--;
