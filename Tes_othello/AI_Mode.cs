@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Threading;
+
 namespace Tes_othello
 {
     class AI_Mode
@@ -64,7 +65,7 @@ namespace Tes_othello
             Console.ForegroundColor = ConsoleColor.Black;
             Console.Write("O");
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write(" = {0}",scoreO);
+            Console.Write(" = {0}", scoreO);
             Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(Console.WindowWidth - 10, Console.WindowHeight - 5);
             Console.Write("X");
@@ -1218,12 +1219,12 @@ namespace Tes_othello
                         }
                         else if (char.IsDigit(key.KeyChar) || key.Key == ConsoleKey.Backspace)
                         {
-                            if (char.IsDigit(key.KeyChar) && sb.Length<2)
+                            if (char.IsDigit(key.KeyChar) && sb.Length < 2)
                             {
                                 sb.Append(key.KeyChar);
                                 System.Console.Write(key.KeyChar.ToString());
                             }
-                            else if(key.Key==ConsoleKey.Backspace)
+                            else if (key.Key == ConsoleKey.Backspace)
                             {
                                 if (sb.Length > 0)
                                 {
@@ -1267,7 +1268,7 @@ namespace Tes_othello
                     Console.SetCursorPosition(Console.WindowWidth / 2 + 20, tmpy + 2);
                     key = a.Next(1, idx);
                     Thread.Sleep(1500);
-                    Console.Write("Computer Choose List {0}",key);
+                    Console.Write("Computer Choose List {0}", key);
                     Console.ReadKey();
                     ReverseOtoX(key);
                     query.Clear();
