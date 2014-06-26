@@ -1,0 +1,6 @@
+C:\Users\Mike\Documents\GitHub\Othello\Tes_othello\obj\Release\Tes_othello.csprojResolveAssemblyReference.cache
+C:\Users\Mike\Documents\GitHub\Othello\Tes_othello\bin\Release\Tes_othello.exe.config
+C:\Users\Mike\Documents\GitHub\Othello\Tes_othello\bin\Release\Tes_othello.exe
+C:\Users\Mike\Documents\GitHub\Othello\Tes_othello\bin\Release\Tes_othello.pdb
+C:\Users\Mike\Documents\GitHub\Othello\Tes_othello\obj\Release\Tes_othello.exe
+C:\Users\Mike\Documents\GitHub\Othello\Tes_othello\obj\Release\Tes_othello.pdb

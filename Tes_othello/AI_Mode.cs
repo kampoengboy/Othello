@@ -123,6 +123,7 @@ namespace Tes_othello
                             else if (j is ButtonX)
                             {
                                 Console.BackgroundColor = ConsoleColor.DarkCyan;
+                                Console.ForegroundColor = ConsoleColor.White;
                                 Console.Write(((ButtonX)j).button);
                             }
                             else
@@ -143,6 +144,7 @@ namespace Tes_othello
                         else if (j is ButtonX)
                         {
                             Console.BackgroundColor = ConsoleColor.DarkCyan;
+                            Console.ForegroundColor = ConsoleColor.White;
                             Console.Write(((ButtonX)j).button);
                         }
                         {
