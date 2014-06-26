@@ -13,3 +13,6 @@ C:\Users\Mike\Documents\GitHub\Othello\Tes_othello\bin\Debug\Tes_othello.pdb
 C:\Users\user\Othello\Tes_othello\bin\Debug\Tes_othello.exe.config
 C:\Users\user\Othello\Tes_othello\obj\Debug\Tes_othello.exe
 C:\Users\user\Othello\Tes_othello\obj\Debug\Tes_othello.pdb
+D:\sem4\pemrograman berbasis objek\othello\Tes_othello\bin\Debug\Tes_othello.exe.config
+D:\sem4\pemrograman berbasis objek\othello\Tes_othello\obj\Debug\Tes_othello.exe
+D:\sem4\pemrograman berbasis objek\othello\Tes_othello\obj\Debug\Tes_othello.pdb
