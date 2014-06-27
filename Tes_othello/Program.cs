@@ -20,7 +20,7 @@ namespace Tes_othello
                 if (othello.hasQueryO)
                 {
                     othello.hasQueryO = false;
-                    othello.Xturn();
+                    othello.Xturn_AI();
                     if (othello.hasQueryX)
                         othello.hasQueryX = false;
                     else
@@ -28,7 +28,7 @@ namespace Tes_othello
                 }
                 else
                 {
-                    othello.Xturn();
+                    othello.Xturn_AI();
                     if (othello.hasQueryX)
                         othello.hasQueryX = false;
                     else
@@ -52,7 +52,7 @@ namespace Tes_othello
         }
         public static void PvP()
         {
-            Board othello = new Board();
+            PvPMode othello = new PvPMode();
             othello.newBoard();
             while (!othello.Allfilled())
             {

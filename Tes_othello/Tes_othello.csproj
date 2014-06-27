@@ -45,7 +45,10 @@
     <Compile Include="Button.cs" />
     <Compile Include="ButtonO.cs" />
     <Compile Include="ButtonX.cs" />
-    <Compile Include="Board.cs" />
+    <Compile Include="FunctionFind.cs" />
+    <Compile Include="MainItem.cs" />
+    <Compile Include="PvPMode.cs" />
+    <Compile Include="Function.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

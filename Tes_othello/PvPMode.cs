@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
-using System.Threading;
 
 namespace Tes_othello
 {
-    class AI_Mode : Function
+    class PvPMode:Function
     {
         public void newBoard()
         {
